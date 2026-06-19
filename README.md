@@ -1,65 +1,74 @@
-# Day17-2A202600743-BuiNgocKhanh
+# Day17-2A202600889-Tran-Duc-Dang-Khoi
 
 ## Thông tin học viên
 
-| Trường | Điền |
+| Trường | Nội dung |
 |---|---|
-| Mã học viên | 2A202600743 |
-| Họ tên | Bùi Ngọc Khánh |
+| Mã học viên | 2A202600889 |
+| Họ tên | Trần Đức Đăng Khôi |
 | Dự án đang làm | Trợ Lý Đặt Xe An Toàn (V-VoiceRide) |
-| Vai trò trong dự án | AI Product Strategy — phân tích JTBD, giả thuyết sản phẩm và thiết kế phương án kiểm chứng |
+| Vai trò trong dự án | AI Product Strategy — phân tích JTBD, product hypothesis và thiết kế phương án kiểm chứng |
 
 ## Build-up Chain
 
 | Hạng mục | Link / ghi chú |
 |---|---|
-| Day 16 artifact 02 | [JTBD Project Analysis](https://github.com/BNK2610/Day16-2A202600743-BuiNgocKhanh-Track01-Lab-Assignment/blob/main/worksheet/02-jtbd-project-analysis.md) |
+| Day 16 artifact 02 | [JTBD Project Analysis](https://github.com/Khoi1905/Day16-2A202600889-Tran-Duc-Dang-Khoi/blob/main/worksheet/02-jtbd-project-analysis.md) |
 | Present board cá nhân | [Mở present-board.html](./artifacts/present-board.html) |
-| Phần của tôi trên board | Toàn bộ board là phần trình bày cá nhân của Bùi Ngọc Khánh |
+| Phần của tôi trên board | Toàn bộ board là phần trình bày cá nhân của Trần Đức Đăng Khôi |
 
 **Công cụ dùng để làm studio:** Markdown, HTML/CSS và trình duyệt.
 
-**Link present board / frame / file:** [`artifacts/present-board.html`](./artifacts/present-board.html)
+**Cách mở board:** clone hoặc tải repo, sau đó mở [`artifacts/present-board.html`](./artifacts/present-board.html) bằng trình duyệt.
 
-> Ghi chú về bằng chứng: bài này kế thừa kết quả JTBD Day 16 và tài liệu dự án đã phân tích trong quá trình làm bài. Dự án chưa có user research thực tế, vì vậy các mô tả về nhu cầu và hành vi người dùng vẫn là hypothesis cần kiểm chứng. Các artifact dưới đây là thiết kế test, không phải kết quả test.
+> **Ranh giới bằng chứng:** Bài này kế thừa phân tích JTBD Day 16 và current approach của dự án. Nhóm chưa có kết quả user research thực tế. Ba artifact dưới đây là thiết kế kiểm chứng và mock interface phục vụ present, không phải kết quả test hay bằng chứng rằng hypothesis đã đúng.
 
 ## Bước 0 — JTBD Checkpoint
 
-| Câu hỏi | Điền |
+| Câu hỏi | Nội dung |
 |---|---|
 | Core JTBD hiện tại là gì? | Sắp xếp phương tiện để di chuyển từ điểm đón đến đúng điểm đến một cách an toàn và tự chủ khi khả năng nhập hoặc kiểm tra thông tin bị hạn chế. |
-| Current workflow hiện tại là gì? | Xác định nhu cầu chuyến đi → tìm/chọn địa chỉ → chuẩn bị thông tin → kiểm tra → đặt chuyến → theo dõi xe → sửa khi có sai sót → nhận diện đúng xe. User hiện có thể tự dùng app gọi xe, gọi tổng đài hoặc nhờ người thân đặt hộ. |
+| Current workflow hiện tại là gì? | Xác định nhu cầu chuyến đi → tìm/chọn địa chỉ → chuẩn bị thông tin → kiểm tra → yêu cầu chuyến → theo dõi xe → sửa khi có sai sót → nhận diện đúng xe. Hiện user có thể tự dùng app gọi xe, gọi tổng đài hoặc nhờ người thân đặt hộ. |
 | Pain step đau nhất là gì? | `Locate`: xác định đúng điểm đón/điểm đến; và `Modify`: sửa đúng phần bị sai mà không phải làm lại toàn bộ. |
-| AI leverage point nằm ở bước nào? | AI hiểu cách diễn đạt địa chỉ và yêu cầu sửa bằng tiếng Việt tự nhiên ở `Locate` và `Modify`; geocoding, read-back và state machine kiểm soát quyết định an toàn. |
-| Điểm còn mơ hồ nhất trước khi chọn hypothesis? | Chưa biết người dùng mục tiêu có thực sự muốn tự sắp xếp chuyến đi và chịu trách nhiệm xác nhận thông tin, hay họ vẫn muốn người thân/tổng đài làm thay. |
+| AI leverage point nằm ở bước nào? | AI hiểu cách diễn đạt địa chỉ và yêu cầu sửa bằng tiếng Việt tự nhiên tại `Locate` và `Modify`; geocoding, read-back và state machine kiểm soát quyết định an toàn. |
+| Điểm còn mơ hồ nhất trước khi chọn hypothesis? | Chưa biết luồng hội thoại có thực sự giúp user hoàn thành kịch bản với ít trợ giúp hơn và cảm thấy kiểm soát, an toàn hơn so với form ứng dụng hay không. |
 
 ## Bước 1 — Hypothesis Card
 
 ### Hypothesis được chọn
 
-> Khi cần đi bệnh viện, người lớn tuổi hoặc ít thành thạo ứng dụng đặt xe có nhu cầu trực tiếp tham gia sắp xếp và tự xác nhận thông tin chuyến đi, thay vì luôn giao toàn bộ thao tác và trách nhiệm cho người thân hoặc tổng đài.
+> Nếu người lớn tuổi hoặc ít thành thạo ứng dụng đặt xe có thể cung cấp và sửa thông tin chuyến đi bằng hội thoại tiếng Việt, đồng thời được nghe lại và xác nhận rõ trước khi tạo booking, thì họ sẽ hoàn thành kịch bản tự sắp xếp chuyến đi với ít trợ giúp hơn và cảm thấy kiểm soát, an toàn hơn so với khi tự thao tác trên form ứng dụng.
 
-| Câu hỏi | Điền |
+| Câu hỏi | Nội dung |
 |---|---|
-| Hypothesis này thuộc phần nào của dự án? | Desirability/value risk: nhu cầu tự chủ của primary persona. Việc họ thích voice hơn một accessible form là hypothesis thứ hai, chưa kết luận trong bài này. |
-| Nếu nó sai thì chuyện gì sập hoặc yếu đi? | Primary persona và value proposition “tự chủ” yếu đi. Dự án có thể phải đổi job executor sang người chăm sóc hoặc trở thành công cụ assisted-booking cho người thân/tổng đài thay vì trợ lý trực tiếp cho người dùng cuối. |
-| Vì sao chọn hypothesis này? | Kế hoạch hiện tại đề xuất một MVP bốn tuần với nhiều dependency, nhưng chưa có user research chứng minh user thật sự muốn trực tiếp thực hiện và chịu trách nhiệm xác nhận job. Đây là assumption đứng trước lựa chọn interaction và feasibility: nếu không có nhu cầu tự chủ, build voice tốt vẫn khó tạo adoption. |
-| Dấu hiệu ban đầu ủng hộ hypothesis | User kể được tình huống gần đây họ muốn tự đặt nhưng phải nhờ người khác; chọn một phương án tự thực hiện thay vì giao toàn bộ cho người thân; hoàn thành scenario mà không giao quyền thao tác cho người hỗ trợ; tự kiểm tra/sửa/xác nhận và đánh giá cảm giác kiểm soát từ 4/5. |
-| Dấu hiệu phản bác hypothesis | User ưu tiên để người thân/tổng đài chịu trách nhiệm; từ chối tự xác nhận thông tin; chỉ chọn trợ lý khi có người hỗ trợ bên cạnh; nhu cầu chính là giá, tài xế hoặc thanh toán chứ không phải thao tác và sửa thông tin. |
+| Hypothesis này thuộc phần nào của dự án? | Usability + trust risk tại hai bước `Locate` và `Modify`, với read-back/explicit confirmation là guardrail. |
+| Nếu nó sai thì chuyện gì yếu đi? | Value proposition của voice-first flow yếu đi. Team cần ưu tiên accessible form, caregiver mode hoặc assisted-booking thay vì đầu tư sâu vào STT/LLM cho hội thoại. |
+| Vì sao chọn hypothesis này? | Đây là bản hypothesis cuối của Day 16 và có thể kiểm tra trước khi build toàn bộ AI stack. Nó tách kết quả người dùng cần đạt khỏi câu hỏi team có thể tích hợp công nghệ hay không. |
+| Dấu hiệu dự kiến ủng hộ | User hoàn thành scenario hợp lệ, tự phát hiện/sửa thông tin sai, cần ít trợ giúp hơn form và đánh giá control/trust từ 4/5. |
+| Dấu hiệu dự kiến phản bác | User cần trợ giúp tương đương hoặc nhiều hơn form, không phát hiện lỗi read-back, không sửa được đúng slot hoặc không muốn tự xác nhận. |
+
+### Tiêu chí kiểm chứng dự kiến
+
+- Completion rate của conversational flow đạt ít nhất **80%**.
+- Correction success đạt ít nhất **70%** mà không cần người điều phối thao tác thay.
+- Control/trust rating đạt ít nhất **4/5**.
+- Số lần yêu cầu trợ giúp thấp hơn khi thực hiện cùng scenario trên form ứng dụng.
+
+> Các con số trên là ngưỡng ra quyết định dự kiến, chưa phải kết quả test.
 
 ## Bước 2 — Current Approach Snapshot
 
 ### Dự án đang định làm gì?
 
-Dự án đang định xây một responsive web app mobile-first hoàn chỉnh trong bốn tuần, gồm:
+Current approach là kế hoạch xây responsive web app mobile-first trong bốn tuần, gồm:
 
 - đăng ký/đăng nhập và phân quyền User/Admin;
 - voice input, STT/TTS tiếng Việt và transcript;
-- LLM trích xuất điểm đón, điểm đến, loại xe và yêu cầu correction;
+- LLM trích xuất điểm đón, điểm đến, loại xe và correction intent;
 - geocoding thật trong phạm vi Hà Nội;
-- state machine, read-back và câu xác nhận bắt buộc;
-- booking giả lập, thông tin tài xế/xe và năm trạng thái chuyến;
-- trang quản trị user/booking, bộ 20 scenario, metrics và deployment.
+- state machine, read-back và explicit confirmation;
+- booking giả lập, thông tin tài xế/xe và vòng đời chuyến;
+- trang quản trị user/booking, bộ scenario đánh giá, metrics và deployment.
 
 ### Vì sao current approach đang đắt hoặc chậm?
 
@@ -67,108 +76,108 @@ Dự án đang định xây một responsive web app mobile-first hoàn chỉnh 
 |---|---|
 | Time | Bốn tuần build, tích hợp, kiểm thử và polish |
 | Scope | Auth, admin, voice, AI, geocoding, booking lifecycle và accessibility |
-| Dependency | STT, TTS, LLM, geocoding API, database, hosting |
-| Design | Nhiều conversation state, error state, correction và safety guardrail |
+| Dependency | STT, TTS, LLM, geocoding API, database và hosting |
+| Design | Conversation state, error state, correction và safety guardrail |
 | Code | Frontend, backend/API, state machine, persistence và quyền truy cập |
-| Data/test | 20 scenario, ground truth transcript, mock driver/vehicle và metric logging |
-| People | Product, design, engineering và người tham gia usability test |
+| Data/test | Scenario, transcript ground truth, mock driver/vehicle và metric logging |
+| People | Product, design, engineering, operator và participant |
 
-Current approach có nguy cơ kiểm chứng “team có thể build hay không” trước khi biết “user có muốn tự làm job này hay không”.
+Current approach có nguy cơ kiểm chứng khả năng build cả hệ thống trước khi biết conversational flow có tạo kết quả tốt hơn form hay không.
 
 ### Câu hỏi bắt buộc
 
 > **Còn cách nào rẻ hơn để test hypothesis này không?**
 
-Có. Ba hướng dưới đây cùng kiểm tra nhu cầu trực tiếp tham gia và tự xác nhận chuyến đi, nhưng chưa cần tích hợp STT, LLM, geocoding, auth hay backend. Preference đối với voice chỉ được ghi nhận như insight phụ, không được dùng thay cho kết luận về nhu cầu tự chủ.
+Có. Ba hướng dưới đây cùng kiểm tra completion, correction, mức trợ giúp và cảm giác kiểm soát, nhưng chưa cần STT, LLM, geocoding, auth hay backend hoạt động thật.
 
 ## Bước 3 — Ba Cách Rẻ Hơn
 
-### Cách A — Storyboard “Tự đi bệnh viện”
+### Cách A — Before/After Storyboard
 
-| Câu hỏi | Điền |
+| Câu hỏi | Nội dung |
 |---|---|
-| Tên hướng test A | Storyboard “Tự đi bệnh viện” |
-| Loại artifact | Storyboard 6 khung + interview prompts |
-| Người dùng sẽ thấy gì? | Một câu chuyện từ lúc cần đi bệnh viện, gặp khó với app, cân nhắc nhờ con, thử trợ lý, sửa địa chỉ và tự xác nhận chuyến. |
-| Phía sau sẽ làm gì? | Người điều phối kể ít nhất có thể, yêu cầu user diễn giải từng khung, liên hệ với chuyến đi gần nhất và chỉ ra đoạn giống/không giống đời thật. Không trình diễn AI thật. |
-| Nó đang test hypothesis nào? | Người dùng có nhu cầu trực tiếp tham gia, kiểm tra và chịu trách nhiệm xác nhận chuyến thay vì mặc định giao toàn bộ job cho người thân. |
-| Vì sao rẻ hơn current approach? | Chỉ cần một trang storyboard và 20–30 phút phỏng vấn; không cần code, API hay dữ liệu hệ thống. |
-| Nó giúp học được gì? | Bối cảnh thật, động lực tự chủ, alternative hiện tại, ai đang chịu trách nhiệm và phần nào của concept tạo hoặc làm giảm niềm tin. |
-| Nó chưa giúp học được gì? | Không chứng minh user thao tác được, không đo STT/LLM accuracy và dễ có social-desirability bias. |
+| Tên hướng test A | “Sửa điểm đến mà không làm lại từ đầu” |
+| Loại artifact | Before/after storyboard + interview prompts |
+| Người dùng sẽ thấy gì? | Hai hành trình cùng một scenario: form app buộc quay lại nhiều bước; conversational flow đọc lại summary, cho sửa đúng điểm đến và yêu cầu xác nhận rõ. |
+| Phía sau sẽ làm gì? | Người điều phối yêu cầu participant kể lại điều đang xảy ra, chỉ ra điểm họ sẽ cần trợ giúp, mô tả thông tin cuối cùng và chấm mức kiểm soát dự kiến. Không giới thiệu một flow là “tốt hơn”. |
+| Nó đang test hypothesis nào? | Hội thoại có read-back/correction giúp user hiểu trạng thái, cần ít trợ giúp hơn và cảm thấy kiểm soát hơn form. |
+| Vì sao rẻ hơn current approach? | Một storyboard và script 20–30 phút; không code, API, dữ liệu hay AI thật. |
+| Nó giúp học được gì? | Concept có dễ hiểu không, điểm nào tạo/mất niềm tin, user dự đoán cần trợ giúp ở đâu và cách họ hiểu read-back. |
+| Nó chưa giúp học được gì? | Không chứng minh hiệu năng thao tác thật, latency, STT/LLM accuracy hoặc adoption. |
 | Artifact A nằm ở đâu? | [Present board — Test A](./artifacts/present-board.html#test-a) |
 
-### Cách B — Fake-door Choice Test
+### Cách B — Paper A/B Task Walkthrough
 
-| Câu hỏi | Điền |
+| Câu hỏi | Nội dung |
 |---|---|
-| Tên hướng test B | “Bạn muốn đặt chuyến theo cách nào?” |
-| Loại artifact | Fake-door mobile screen + forced-choice follow-up |
-| Người dùng sẽ thấy gì? | Một tình huống đi bệnh viện và ba lựa chọn được mô tả với độ dài/lợi ích cân bằng: tự thao tác trên app, tự thao tác với trợ lý hội thoại, hoặc nhờ người thân thao tác. Thứ tự ba lựa chọn được xoay giữa participant. |
-| Phía sau sẽ làm gì? | Ghi nhận lựa chọn đầu tiên, lý do, kỳ vọng và điều kiện khiến user đổi lựa chọn. Primary signal là tỷ lệ chọn một trong hai phương án tự thực hiện so với giao job cho người thân; lựa chọn app hay voice là secondary signal. |
-| Nó đang test hypothesis nào? | Khi đứng trước alternative thật, user có chủ động giữ vai trò thực hiện/xác nhận job hay giao toàn bộ thao tác và trách nhiệm cho người thân. |
-| Vì sao rẻ hơn current approach? | Một màn hình tĩnh/clickable; không cần chức năng voice, booking thật hoặc backend. |
-| Nó giúp học được gì? | Preference giữa tự thực hiện và nhờ người khác, lý do giữ/giao trách nhiệm; đồng thời thu thêm secondary insight về app so với voice. |
-| Nó chưa giúp học được gì? | Click không đồng nghĩa usage/adoption; cách viết option có thể tạo framing bias; chưa kiểm tra trải nghiệm dài. |
+| Tên hướng test B | “Cùng một chuyến, hai cách hoàn thành” |
+| Loại artifact | Paper/click-through prototype A/B + scorecard |
+| Người dùng sẽ thấy gì? | Hai prototype dùng cùng dữ liệu và scenario: form nhập liệu nhiều bước và conversational flow có summary, correction, confirmation. |
+| Phía sau sẽ làm gì? | Participant thực hiện cả hai flow; thứ tự được đảo giữa participant. Facilitator chỉ phản hồi theo script, ghi completion, thời gian, help requests, lỗi phát hiện, correction success và control rating. |
+| Nó đang test hypothesis nào? | Conversational flow giúp hoàn thành scenario với ít trợ giúp hơn, đồng thời duy trì mức hiểu và kiểm soát tốt hơn form. |
+| Vì sao rẻ hơn current approach? | Chỉ cần các màn hình tĩnh và facilitator chuyển state thủ công; chưa cần voice, backend hoặc booking thật. |
+| Nó giúp học được gì? | So sánh hành vi định hướng giữa hai flow trên cùng tác vụ: số bước, điểm bối rối, trợ giúp, phát hiện lỗi và confidence. |
+| Nó chưa giúp học được gì? | Mẫu nhỏ chỉ cho directional signal; chưa kiểm tra chất lượng nhận dạng giọng nói và môi trường sử dụng thật. |
 | Artifact B nằm ở đâu? | [Present board — Test B](./artifacts/present-board.html#test-b) |
 
-### Cách C — Wizard-of-Oz Safety Concierge
+### Cách C — Wizard-of-Oz Error Recovery
 
-| Câu hỏi | Điền |
+| Câu hỏi | Nội dung |
 |---|---|
-| Tên hướng test C | Safety Concierge |
+| Tên hướng test C | “Nghe sai cổng bệnh viện” |
 | Loại artifact | Wizard-of-Oz flow + mobile screens + operator script |
-| Người dùng sẽ thấy gì? | Một màn hình giống trợ lý đang nghe, hỏi thiếu thông tin, đọc lại, cho sửa từng phần và yêu cầu câu xác nhận rõ. |
-| Phía sau sẽ làm gì? | Người vận hành nghe câu nói, tự điền slot vào control sheet, chọn phản hồi có sẵn và đọc/phát phản hồi như hệ thống. Booking và tài xế đều là dữ liệu mock. |
-| Nó đang test hypothesis nào? | User có trực tiếp tiếp tục flow, tự kiểm tra, tự sửa và tự xác nhận hay chuyển quyền thao tác/trách nhiệm cho người hỗ trợ. |
-| Vì sao rẻ hơn current approach? | Mô phỏng STT, LLM, geocoding và state machine bằng con người; chỉ cần prototype vài màn hình và script. |
-| Nó giúp học được gì? | Hành vi gần thật: tỷ lệ tự hoàn thành, số lần giao thiết bị/nhờ thao tác thay, correction chủ động, phát hiện lỗi trong read-back, explicit confirmation và cảm giác kiểm soát. |
-| Nó chưa giúp học được gì? | Không chứng minh technical feasibility, latency hay accuracy của AI thật; operator có thể phản hồi tốt hơn hệ thống tương lai. |
+| Người dùng sẽ thấy gì? | Trợ lý đang nghe, hỏi thiếu thông tin, đọc lại một summary có lỗi “cổng chính”, nhận correction “cổng số 2”, đọc lại và yêu cầu xác nhận. |
+| Phía sau sẽ làm gì? | Operator đóng vai STT/LLM/geocoding theo response library, cố ý đưa một lỗi đã định trước, cập nhật đúng slot khi user sửa và ghi hành vi trên scorecard. Booking/tài xế đều là mock. |
+| Nó đang test hypothesis nào? | User có thể phát hiện, sửa và xác nhận thông tin bằng hội thoại với ít trợ giúp, đồng thời giữ cảm giác kiểm soát và an toàn. |
+| Vì sao rẻ hơn current approach? | Con người mô phỏng AI stack; chỉ cần vài màn hình, script và bảng ghi nhận. |
+| Nó giúp học được gì? | Hành vi gần thật: completion, correction success, help requests, phát hiện lỗi read-back, explicit confirmation và control/trust rating. |
+| Nó chưa giúp học được gì? | Không chứng minh feasibility, latency hoặc accuracy của AI thật; operator có thể phản hồi tốt hơn hệ thống tương lai. |
 | Artifact C nằm ở đâu? | [Present board — Test C](./artifacts/present-board.html#test-c) |
 
 ## Bước 4 — Checklist Artifact
 
 | Cách | Đã có artifact? | Artifact là gì? | Link |
 |---|---|---|---|
-| A | Có | Storyboard 6 khung và interview prompts | [Test A](./artifacts/present-board.html#test-a) |
-| B | Có | Fake-door mobile choice screen và follow-up | [Test B](./artifacts/present-board.html#test-b) |
-| C | Có | Wizard-of-Oz flow, user screens và operator script | [Test C](./artifacts/present-board.html#test-c) |
+| A | Có | Before/after storyboard và interview prompts | [Test A](./artifacts/present-board.html#test-a) |
+| B | Có | Hai task flow prototype và scorecard | [Test B](./artifacts/present-board.html#test-b) |
+| C | Có | Wizard-of-Oz error-recovery flow và operator script | [Test C](./artifacts/present-board.html#test-c) |
 
 ## Bước 5 — So Sánh Nhanh
 
-| Tiêu chí | Cách A — Storyboard | Cách B — Fake door | Cách C — Wizard of Oz |
+| Tiêu chí | A — Storyboard | B — Paper A/B | C — Wizard of Oz |
 |---|---|---|---|
-| Nhanh hơn current approach ở đâu? | Có thể chuẩn bị và chạy trong một ngày | Có thể dựng trong vài giờ | Có thể dựng và chạy thử trong 1–2 ngày |
-| Rẻ hơn ở đâu? | Không code/API | Chỉ cần một màn hình clickable | Không cần AI/backend; vận hành thủ công |
+| Nhanh hơn current approach ở đâu? | Dựng và chạy trong một ngày | Dựng trong một ngày, không tích hợp | Dựng/chạy thử trong 1–2 ngày |
+| Rẻ hơn ở đâu? | Không code/API | Màn hình tĩnh, facilitator đổi state | Không AI/backend; operator vận hành |
 | Gần hành vi thật tới đâu? | Thấp–trung bình | Trung bình | Cao nhất trong ba cách |
-| Học được rõ nhất | Bối cảnh, động lực và alternative | Preference và value proposition | Hành vi, correction, trust và điểm bỏ cuộc |
-| Giới hạn lớn nhất | User nói điều “nghe hợp lý” | Click không phải adoption | Operator bias, không test feasibility |
+| Học được rõ nhất | Comprehension và perceived control | So sánh completion/help giữa hai flow | Error recovery, trust và confirmation |
+| Giới hạn lớn nhất | Social-desirability bias | Prototype không có voice thật | Operator bias, không test feasibility |
 
-**Cách thuyết phục nhất khi present:** C — Wizard-of-Oz, vì cho thấy một flow gần thật mà chưa cần build hệ thống.
+**Cách thuyết phục nhất khi present:** C — Wizard-of-Oz Error Recovery, vì cho thấy hành vi phát hiện và sửa lỗi gần thật mà chưa cần build AI stack.
 
-**Cách dễ bị phản biện nhất:** B — Fake-door, vì lựa chọn trên màn hình có thể bị framing bias và chưa tạo commitment thật.
+**Cách dễ bị phản biện nhất:** A — Before/After Storyboard, vì visual/copy có thể làm conversational flow trông thuận lợi hơn và câu trả lời vẫn là self-report.
 
 ### Trình tự chạy test đề xuất
 
-1. Chạy A trước để kiểm tra context và sửa ngôn ngữ concept.
-2. Chạy B để so sánh preference với alternative.
-3. Chỉ chạy C với những participant có nhu cầu hoặc hành vi phù hợp, nhằm quan sát flow gần thật.
+1. Chạy A để kiểm tra cách user hiểu concept và hiệu chỉnh ngôn ngữ.
+2. Chạy B để so sánh hai flow trên cùng scenario và xác định điểm cần trợ giúp.
+3. Chạy C để quan sát error recovery bằng hội thoại gần hành vi thật hơn.
 
-### Tiêu chí quyết định sau test
+### Decision rules sau test
 
 | Kết quả | Quyết định gợi ý |
 |---|---|
-| Nhu cầu tự chủ yếu, đa số muốn người thân chịu trách nhiệm | Xem lại primary user/job executor trước khi build voice-first MVP |
-| Có nhu cầu tự chủ nhưng không chọn voice | Khám phá accessible form, assisted mode hoặc caregiver flow |
-| Chọn concept nhưng bỏ cuộc trong WoZ | Sửa workflow/read-back/correction trước khi tích hợp AI |
-| Hoàn thành WoZ với ít trợ giúp và trust ≥ 4/5 | Tiến tới technical spike cho STT/LLM/state machine |
+| Completion/correction không đạt ngưỡng hoặc cần trợ giúp không giảm | Dừng đầu tư voice-first; sửa workflow hoặc ưu tiên accessible form |
+| Hoàn thành tốt nhưng control/trust thấp | Sửa read-back, trạng thái và explicit confirmation trước technical spike |
+| Perceived value tốt nhưng WoZ thất bại ở correction | Thu hẹp intent/slot và chuẩn hóa recovery flow |
+| Completion ≥80%, correction ≥70%, control/trust ≥4/5 và ít trợ giúp hơn form | Tiến tới technical spike cho STT/LLM/geocoding/state machine |
 
 ## Bước 6 — Present Board Cá Nhân
 
-| Câu hỏi | Điền |
+| Câu hỏi | Nội dung |
 |---|---|
-| Đã gom đủ 5 khối lên board chưa? | Rồi: Hypothesis, Current Approach, Test A, Test B, Test C và trade-off. |
-| Artifact quan trọng nhất khi present? | Wizard-of-Oz Safety Concierge, vì nó thể hiện cách kiểm tra hành vi gần thật mà chưa build AI stack. |
-| Chỗ nào trên board dễ dài chữ? | Current approach và giới hạn từng test; khi present chỉ nói headline và dùng README cho chi tiết. |
+| Đã gom đủ năm khối lên board chưa? | Rồi: Hypothesis, Current Approach, Test A, Test B, Test C và phần trade-off. |
+| Artifact quan trọng nhất khi present? | Wizard-of-Oz Error Recovery, vì nó thể hiện trực tiếp read-back, correction và explicit confirmation. |
+| Chỗ nào trên board dễ dài chữ? | Current approach và operator script; khi present chỉ nói headline, dùng README cho chi tiết. |
 
 ## Bước 7 — Present Cá Nhân
 
@@ -178,54 +187,47 @@ Có. Ba hướng dưới đây cùng kiểm tra nhu cầu trực tiếp tham gia
 
 ### Câu mở đầu 30 giây
 
-> Dự án của tôi định xây một trợ lý đặt xe bằng giọng nói cho người lớn tuổi, nhưng trước khi tích hợp STT, LLM, geocoding và state machine, có một câu hỏi rẻ hơn cần trả lời: người dùng có thật sự muốn tự sắp xếp chuyến đi hay vẫn muốn người thân làm và chịu trách nhiệm thay? Tôi chọn hypothesis này và thiết kế ba cách test tăng dần độ gần với hành vi thật.
+> Dự án của tôi định xây trợ lý đặt xe bằng hội thoại cho người lớn tuổi, nhưng trước khi tích hợp STT, LLM và geocoding, tôi cần trả lời một câu hỏi nhỏ hơn: read-back và correction bằng hội thoại có thật sự giúp user hoàn thành tác vụ với ít trợ giúp hơn và cảm thấy kiểm soát hơn form ứng dụng không?
 
 ### Script present 3–4 phút
 
 **0:00–0:30 — JTBD checkpoint**
 
-> Lát cắt của tôi là người lớn tuổi hoặc ít rành app cần tự đi bệnh viện. Job của họ không phải “dùng AI”, mà là sắp xếp phương tiện để đi đúng nơi, an toàn và tự chủ. Hai bước đau được giả định là xác định địa chỉ và sửa thông tin sai.
+> Lát cắt của tôi là người lớn tuổi hoặc ít rành app cần tự sắp xếp chuyến đi bệnh viện. Job không phải “dùng AI”, mà là đi đúng nơi, an toàn và tự chủ khi khó nhập hoặc kiểm tra thông tin. Hai bước đau nhất là Locate và Modify.
 
 **0:30–1:00 — Hypothesis**
 
-> Assumption nguy hiểm nhất là họ thực sự muốn tự làm job này. Nếu họ muốn người thân hoặc tổng đài chịu trách nhiệm, một voice flow dù hoạt động tốt vẫn khó tạo adoption.
+> Tôi kiểm tra liệu conversational flow có read-back, sửa từng phần và xác nhận rõ có giúp user cần ít trợ giúp hơn, đồng thời kiểm soát và an toàn hơn form hay không.
 
 **1:00–1:35 — Current approach**
 
-> Kế hoạch hiện tại đề xuất MVP bốn tuần với auth, admin, STT, TTS, LLM, geocoding, state machine và booking giả lập. Cách này phù hợp để chứng minh hệ thống, nhưng quá lớn để trả lời câu hỏi desirability đầu tiên.
+> MVP bốn tuần gồm auth, voice, STT/TTS, LLM, geocoding, state machine và booking mock. Cách này quá lớn để trả lời riêng câu hỏi usability và trust trước khi build.
 
 **1:35–2:50 — Ba cheaper tests**
 
-> Test A là storyboard interview để tìm lại hành vi gần nhất, động lực tự chủ và alternative thật. Test B là fake-door choice test: primary signal là user chọn tự thực hiện hay giao job cho người thân; app so với voice chỉ là secondary signal. Test C là Wizard-of-Oz: user trải qua một flow gần thật nhưng phía sau người vận hành đóng vai STT, LLM và state machine. Ba cách cùng test một hypothesis, nhưng lần lượt tăng từ điều user kể, điều user chọn đến điều user thực sự làm.
+> Test A là before/after storyboard để kiểm tra cách user hiểu hai journey. Test B cho user walkthrough cùng scenario trên form và hội thoại, rồi so completion, help requests và control. Test C dùng Wizard-of-Oz với lỗi “cổng chính” để xem user có phát hiện, sửa thành “cổng số 2” và tự xác nhận hay không.
 
 **2:50–3:25 — Trade-off**
 
-> Storyboard rẻ nhất nhưng dễ có social-desirability bias. Fake-door cho signal lựa chọn nhưng click chưa phải adoption. Wizard-of-Oz gần hành vi thật nhất nhưng không chứng minh feasibility kỹ thuật và có operator bias.
+> Storyboard nhanh nhất nhưng thiên về self-report. Paper A/B cho so sánh trực tiếp nhưng chưa có voice thật. Wizard-of-Oz gần hành vi nhất nhưng có operator bias và chưa chứng minh feasibility.
 
 **3:25–3:45 — Xin phản biện**
 
-> Tôi muốn lớp phản biện vào hai điểm: ba test đã thực sự tách nhu cầu tự chủ khỏi preference đối với voice chưa, và các behavioral metrics của Test C có đủ phân biệt mong muốn giữ trách nhiệm với việc chỉ làm theo hướng dẫn hay không?
+> Tôi muốn lớp phản biện liệu ba artifact đã tách được perceived control khỏi task performance chưa, và lỗi cài sẵn trong Wizard-of-Oz có đủ đại diện cho rủi ro Locate/Modify hay không.
 
 ### Hai câu hỏi muốn lớp phản biện
 
-1. Sau khi tách preference đối với voice ra khỏi hypothesis chính, ba test hiện tại đã đo đúng nhu cầu trực tiếp tham gia và tự xác nhận job chưa?
-2. Những hành vi nào trong Wizard-of-Oz vẫn có thể bị hiểu nhầm là “user làm theo hướng dẫn” thay vì thực sự muốn giữ trách nhiệm?
+1. Bộ metrics completion, correction, help requests và control/trust đã đủ để kết luận “tốt hơn form” ở mức directional chưa?
+2. Trong Wizard-of-Oz, cần thêm lỗi hoặc tình huống nào để tránh chỉ kiểm tra một happy path có correction đơn giản?
 
 ## Bước 8 — Ghi Lại Sau Present
 
-| Câu hỏi | Ghi sau review |
+| Câu hỏi | Ghi chú |
 |---|---|
-| Phản biện quan trọng nhất vừa nhận là gì? | Hypothesis ban đầu gộp hai niềm tin khác nhau: user muốn trực tiếp làm job và user sẽ chọn voice safety-first. Nếu test thất bại sẽ không biết nhu cầu tự chủ không tồn tại hay chỉ interaction voice chưa phù hợp. |
-| Trong ba cách test, cách nào bị hỏi nhiều nhất? | Test B — Fake-door, vì cách mô tả trợ lý ban đầu hấp dẫn và chi tiết hơn alternative, dễ tạo framing bias; click cũng chưa phải adoption. |
-| Cần chỉnh gì trên board/artifact? | Thu hẹp hypothesis vào nhu cầu trực tiếp tham gia/tự xác nhận; coi voice preference là secondary hypothesis; cân bằng copy và xoay thứ tự option trong Test B; bổ sung behavioral metrics cụ thể cho Test C. |
-| Điều gì muốn giữ nguyên sau phản biện? | Giữ current approach snapshot và chuỗi ba test tăng dần từ điều user kể → chọn → làm. Giữ Wizard-of-Oz là artifact chính vì cho signal hành vi gần thật nhất mà chưa cần build AI stack. |
-
-### Thay đổi đã áp dụng sau review
-
-- Tách “muốn tự chủ” khỏi “chọn voice”.
-- Đổi primary signal của Test B thành `tự thực hiện` so với `giao job cho người thân`.
-- Yêu cầu cân bằng copy và xoay thứ tự ba lựa chọn trong Test B.
-- Chốt metrics Test C: tự hoàn thành, số lần giao thiết bị/nhờ thao tác, correction chủ động, phát hiện lỗi read-back, explicit confirmation và control rating.
+| Phản biện quan trọng nhất vừa nhận là gì? |  |
+| Trong ba cách test, cách nào bị hỏi nhiều nhất? |  |
+| Cần chỉnh gì trên board/artifact? |  |
+| Điều gì muốn giữ nguyên sau phản biện? |  |
 
 ## Checklist Trước Khi Nộp
 
@@ -236,11 +238,11 @@ Có. Ba hướng dưới đây cùng kiểm tra nhu cầu trực tiếp tham gia
 - [x] Tôi đã làm artifact cho cả ba cách.
 - [x] Tôi đã gom thành present board.
 - [x] Tôi đã chuẩn bị phần present cá nhân.
-- [x] Tôi đã present trên lớp và bổ sung phản biện của giảng viên/lớp 
+- [x] Tôi đã tạo sẵn mục ghi chú sau present.
 
 ## Chốt Trong 60 Giây
 
-1. Tôi test hypothesis rằng người dùng mục tiêu thật sự muốn trực tiếp tham gia và tự xác nhận chuyến đi thay vì luôn giao toàn bộ job cho người thân; preference đối với voice là hypothesis thứ hai.
-2. Current approach là một MVP bốn tuần với nhiều API và thành phần kỹ thuật, quá lớn để kiểm tra desirability đầu tiên.
-3. Ba cách rẻ hơn là storyboard interview, fake-door choice test và Wizard-of-Oz safety concierge.
-4. Ba artifact lần lượt giúp kiểm tra điều user kể, điều user chọn và điều user thực sự làm trước khi team quyết định build AI stack.
+1. Tôi test hypothesis rằng conversational flow có read-back/correction giúp user hoàn thành tác vụ với ít trợ giúp hơn và cảm thấy kiểm soát, an toàn hơn form.
+2. Current approach là MVP bốn tuần với nhiều API và dependency, quá lớn để kiểm tra riêng usability/trust đầu tiên.
+3. Ba cách rẻ hơn là before/after storyboard, paper A/B task walkthrough và Wizard-of-Oz error recovery.
+4. Ba artifact lần lượt kiểm tra điều user hiểu, cách user thực hiện hai flow và hành vi phát hiện/sửa lỗi trước khi team quyết định build AI stack.

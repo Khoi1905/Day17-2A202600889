@@ -3,405 +3,203 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Day 17 — Cheaper Tests for V-VoiceRide</title>
+  <title>Day 17 · Trần Đức Đăng Khôi · V-VoiceRide</title>
   <style>
     :root {
-      --ink: #172033;
-      --muted: #667085;
-      --paper: #f7f8f3;
-      --card: #ffffff;
-      --line: #d9dfd2;
-      --green: #1f6f5c;
-      --green-soft: #dff3ea;
-      --orange: #f29e62;
-      --orange-soft: #fff0e4;
-      --blue: #3c6e9f;
-      --blue-soft: #e8f1fb;
-      --red: #b84c4c;
-      --yellow: #f5d96b;
-      --shadow: 0 14px 40px rgba(23, 32, 51, .08);
+      --ink: #172131;
+      --muted: #647084;
+      --paper: #f5f3ed;
+      --white: #ffffff;
+      --green: #1f8a70;
+      --green-soft: #dff3eb;
+      --blue: #3867d6;
+      --blue-soft: #e7efff;
+      --orange: #ee7b45;
+      --orange-soft: #fff0e7;
+      --line: #d9dde5;
+      --shadow: 0 16px 45px rgba(23, 33, 49, 0.10);
     }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      background:
-        radial-gradient(circle at 12% 5%, rgba(242,158,98,.16), transparent 23rem),
-        radial-gradient(circle at 91% 14%, rgba(31,111,92,.13), transparent 25rem),
-        var(--paper);
       color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(31,138,112,.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(56,103,214,.10), transparent 30%),
+        var(--paper);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
     a { color: inherit; }
-    .board { width: min(1440px, calc(100% - 32px)); margin: 0 auto; padding: 34px 0 80px; }
+    .board { width: min(1440px, calc(100% - 36px)); margin: 0 auto; padding: 18px 0 44px; }
     .topbar {
       position: sticky;
       top: 12px;
-      z-index: 20;
+      z-index: 10;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 16px;
-      margin-bottom: 28px;
-      padding: 10px 14px;
-      border: 1px solid rgba(217,223,210,.9);
+      justify-content: space-between;
+      gap: 18px;
+      padding: 13px 18px;
+      border: 1px solid rgba(255,255,255,.8);
       border-radius: 18px;
-      background: rgba(255,255,255,.86);
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 10px 30px rgba(23,33,49,.08);
       backdrop-filter: blur(14px);
-      box-shadow: 0 8px 24px rgba(23,32,51,.06);
     }
-    .brand { font-weight: 850; letter-spacing: -.02em; }
-    .nav { display: flex; flex-wrap: wrap; gap: 8px; }
+    .brand { font-weight: 900; letter-spacing: -.02em; }
+    .nav { display: flex; flex-wrap: wrap; gap: 7px; }
     .nav a {
-      padding: 7px 11px;
+      padding: 7px 10px;
       border-radius: 999px;
       color: var(--muted);
       font-size: 13px;
+      font-weight: 800;
       text-decoration: none;
     }
-    .nav a:hover { background: var(--green-soft); color: var(--green); }
+    .nav a:hover, .nav a:focus-visible { color: var(--ink); background: var(--paper); outline: none; }
 
-    .hero {
-      display: grid;
-      grid-template-columns: 1.25fr .75fr;
-      gap: 22px;
-      align-items: stretch;
-      margin-bottom: 22px;
-    }
-    .hero-main, .hero-side, .section, .test-card, .tradeoff {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.94);
+    .hero, .section, .test-card, .tradeoff {
+      margin-top: 18px;
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 30px;
+      background: var(--white);
       box-shadow: var(--shadow);
     }
-    .hero-main {
-      min-height: 340px;
-      padding: 44px;
-      border-radius: 32px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow: hidden;
-      position: relative;
-    }
-    .hero-main::after {
-      content: "?";
-      position: absolute;
-      right: 28px;
-      bottom: -72px;
-      color: var(--green-soft);
-      font-size: 270px;
-      font-weight: 900;
-      line-height: 1;
-      z-index: 0;
-    }
-    .hero-main > * { position: relative; z-index: 1; }
-    .eyebrow {
-      margin: 0 0 10px;
-      color: var(--green);
-      font-size: 13px;
-      font-weight: 850;
-      letter-spacing: .13em;
-      text-transform: uppercase;
-    }
-    h1 {
-      max-width: 940px;
-      margin: 0;
-      font-size: clamp(42px, 6vw, 82px);
-      line-height: .98;
-      letter-spacing: -.055em;
-    }
-    .hero-copy { max-width: 800px; margin: 24px 0 0; color: var(--muted); font-size: 19px; }
-    .chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 28px; }
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: #f1f4ef;
-      font-size: 13px;
-      font-weight: 700;
-    }
+    .hero { display: grid; grid-template-columns: 1.25fr .75fr; overflow: hidden; }
+    .hero-main { min-height: 470px; padding: 56px; display: flex; flex-direction: column; justify-content: space-between; }
+    .hero-side { padding: 46px; color: white; background: var(--ink); display: flex; flex-direction: column; justify-content: space-between; gap: 28px; }
+    .eyebrow { margin: 0 0 10px; color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { max-width: 900px; margin: 0; font-size: clamp(46px, 6.3vw, 90px); line-height: .96; letter-spacing: -.065em; }
+    h2 { margin: 0; font-size: clamp(27px, 3vw, 43px); line-height: 1.08; letter-spacing: -.045em; }
+    h3 { margin: 0 0 8px; line-height: 1.2; }
+    p { color: var(--muted); }
+    .hero-copy { max-width: 820px; margin: 24px 0 0; font-size: 20px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+    .chip { display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 999px; background: #eef1f4; font-size: 13px; font-weight: 800; }
     .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
-    .hero-side {
-      padding: 28px;
-      border-radius: 32px;
-      background: var(--ink);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .hero-side h2 { margin: 0; font-size: 28px; letter-spacing: -.035em; }
-    .hero-side blockquote { margin: 22px 0; font-size: 20px; line-height: 1.45; font-weight: 720; }
-    .risk {
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,.18);
-      border-radius: 18px;
-      background: rgba(255,255,255,.08);
-      font-size: 14px;
-    }
+    blockquote { margin: 20px 0 0; color: white; font-size: 22px; font-weight: 700; line-height: 1.45; }
+    .risk { padding: 16px 18px; border: 1px solid #41516a; border-radius: 18px; color: #dce3ec; background: #202d40; }
 
-    .section { margin-top: 22px; padding: 32px; border-radius: 28px; }
-    .section-head { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin-bottom: 24px; }
-    .section h2, .test-card h2, .tradeoff h2 { margin: 0; font-size: 34px; letter-spacing: -.04em; }
-    .section-head p { max-width: 620px; margin: 0; color: var(--muted); }
-
-    .approach-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; }
-    .stack {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      align-content: start;
-    }
-    .stack-item {
-      min-height: 92px;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 17px;
-      background: #fbfcfa;
-      font-size: 13px;
-      font-weight: 760;
-    }
-    .stack-item span { display: block; margin-top: 7px; color: var(--muted); font-weight: 500; }
-    .cost-box {
-      padding: 22px;
-      border-radius: 22px;
-      background: var(--orange-soft);
-      border: 1px solid #f5c9aa;
-    }
-    .cost-box strong { display: block; color: #9a4f1b; font-size: 22px; margin-bottom: 12px; }
+    .section, .test-card, .tradeoff { padding: 38px; }
+    .section-head { display: flex; justify-content: space-between; gap: 30px; align-items: end; margin-bottom: 24px; }
+    .section-head > p { max-width: 560px; margin: 0; }
+    .approach-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 20px; }
+    .stack { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .stack-item { min-height: 105px; padding: 16px; border-radius: 18px; background: #f1f4f7; font-weight: 900; }
+    .stack-item span { display: block; margin-top: 8px; color: var(--muted); font-size: 12px; font-weight: 600; }
+    .cost-box { padding: 22px; border-radius: 20px; background: var(--orange-soft); }
+    .cost-box strong { display: block; margin-bottom: 8px; color: #a9451d; }
+    .cost-box p { margin: 0 0 14px; color: var(--ink); font-size: 20px; font-weight: 900; }
     .cost-box ul { margin: 0; padding-left: 20px; }
 
-    .tests { display: grid; gap: 22px; margin-top: 22px; }
-    .test-card { padding: 32px; border-radius: 28px; scroll-margin-top: 90px; }
-    .test-meta { display: flex; flex-wrap: wrap; gap: 9px; margin: 10px 0 24px; }
-    .tag { padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; }
-    .tag.green { color: var(--green); background: var(--green-soft); }
-    .tag.orange { color: #9a4f1b; background: var(--orange-soft); }
-    .tag.blue { color: var(--blue); background: var(--blue-soft); }
+    .tests { display: grid; gap: 18px; }
+    .test-card h2 { max-width: 960px; }
+    .test-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 24px; }
+    .tag { padding: 7px 10px; border-radius: 999px; font-size: 12px; font-weight: 900; }
+    .tag.green { color: #176d59; background: var(--green-soft); }
+    .tag.blue { color: #244ea9; background: var(--blue-soft); }
+    .tag.orange { color: #a9451d; background: var(--orange-soft); }
 
-    .storyboard { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
-    .frame {
-      min-height: 250px;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #fff;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .frame-no { color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .1em; }
-    .scene {
-      position: relative;
-      height: 112px;
-      overflow: hidden;
-      border-radius: 14px;
-      background: var(--green-soft);
-    }
-    .scene.orange { background: var(--orange-soft); }
-    .scene.blue { background: var(--blue-soft); }
-    .person {
-      position: absolute;
-      left: 18px;
-      bottom: 12px;
-      width: 52px;
-      height: 52px;
-      border-radius: 50% 50% 42% 42%;
-      background: #e7b997;
-      border: 4px solid white;
-    }
-    .person::before {
-      content: "";
-      position: absolute;
-      left: 4px;
-      top: -9px;
-      width: 36px;
-      height: 22px;
-      border-radius: 50% 50% 20% 20%;
-      background: #d7d7d7;
-    }
-    .phone {
-      position: absolute;
-      right: 17px;
-      bottom: 15px;
-      width: 42px;
-      height: 75px;
-      padding: 6px;
-      border: 5px solid var(--ink);
-      border-radius: 10px;
-      background: white;
-    }
-    .phone::after {
-      content: "";
-      display: block;
-      width: 100%;
-      height: 100%;
-      border-radius: 4px;
-      background: linear-gradient(var(--green) 0 18%, #edf1eb 18% 37%, var(--orange) 37% 48%, #edf1eb 48%);
-    }
-    .bubble {
-      position: absolute;
-      top: 12px;
-      right: 10px;
-      max-width: 105px;
-      padding: 8px 10px;
-      border-radius: 13px 13px 4px 13px;
-      background: white;
-      box-shadow: 0 4px 12px rgba(23,32,51,.08);
-      font-size: 10px;
-      font-weight: 750;
-    }
-    .frame h3 { margin: 0; font-size: 15px; line-height: 1.25; }
-    .frame p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
+    .story-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .journey { padding: 22px; border-radius: 22px; background: #f3f5f7; }
+    .journey.after { background: var(--green-soft); }
+    .journey-title { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 15px; }
+    .journey-title span { font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; }
+    .frames { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+    .frame { min-height: 165px; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: white; }
+    .frame-no { color: var(--muted); font-size: 10px; font-weight: 900; letter-spacing: .08em; }
+    .scene { height: 62px; margin: 9px 0; border-radius: 12px; background: linear-gradient(135deg,#e9eef4,#dce5ee); position: relative; }
+    .scene::before { content: ""; position: absolute; left: 12px; bottom: 10px; width: 30px; height: 30px; border-radius: 50%; background: var(--blue); }
+    .scene::after { content: ""; position: absolute; right: 10px; top: 10px; width: 70px; height: 32px; border-radius: 12px; background: white; box-shadow: inset 0 0 0 1px var(--line); }
+    .journey.after .scene::before { background: var(--green); }
+    .frame h3 { font-size: 15px; }
+    .frame p { margin: 0; font-size: 12px; }
+    .prompts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
+    .prompt { padding: 14px; border-radius: 16px; background: #fff8e9; font-size: 13px; font-weight: 700; }
 
-    .prompts {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 16px;
-    }
-    .prompt { padding: 14px; border-left: 4px solid var(--green); border-radius: 10px; background: #f5f7f3; font-size: 13px; }
+    .ab-layout { display: grid; grid-template-columns: 1fr 1fr .75fr; gap: 16px; }
+    .prototype { padding: 20px; border-radius: 22px; background: #f2f5f8; }
+    .prototype.conversation { background: var(--blue-soft); }
+    .phone { max-width: 310px; margin: 15px auto 0; padding: 10px; border: 8px solid var(--ink); border-radius: 32px; background: white; }
+    .phone-top { display: flex; justify-content: space-between; padding: 3px 5px 10px; font-size: 10px; font-weight: 900; }
+    .screen { min-height: 405px; padding: 18px; border-radius: 20px; background: #fafbfc; }
+    .field, .summary-row { margin-top: 11px; padding: 11px; border: 1px solid var(--line); border-radius: 12px; background: white; }
+    .field small, .summary-row small { display: block; color: var(--muted); font-weight: 800; }
+    .field strong, .summary-row strong { display: block; margin-top: 3px; font-size: 13px; }
+    .mic { width: 68px; height: 68px; margin: 18px auto; border-radius: 50%; display: grid; place-items: center; color: white; background: var(--blue); font-size: 28px; }
+    .button { margin-top: 14px; padding: 12px; border-radius: 12px; color: white; background: var(--ink); text-align: center; font-weight: 900; font-size: 13px; }
+    .scorecard { padding: 22px; border-radius: 22px; color: white; background: var(--ink); }
+    .score-item { padding: 12px 0; border-bottom: 1px solid #41516a; }
+    .score-item:last-child { border-bottom: 0; }
+    .score-item strong { display: block; color: #94e1cb; }
+    .score-item span { color: #d4dce7; font-size: 13px; }
 
-    .fake-layout { display: grid; grid-template-columns: 420px 1fr; gap: 28px; align-items: center; }
-    .mobile {
-      width: 360px;
-      margin: 0 auto;
-      padding: 12px;
-      border: 8px solid var(--ink);
-      border-radius: 38px;
-      background: #fff;
-      box-shadow: 0 18px 40px rgba(23,32,51,.18);
-    }
-    .mobile-screen { min-height: 610px; padding: 22px 16px; border-radius: 24px; background: #f8faf7; }
-    .mobile-top { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; }
-    .mobile h3 { margin: 30px 0 8px; font-size: 27px; line-height: 1.1; letter-spacing: -.035em; }
-    .mobile .sub { margin: 0 0 20px; color: var(--muted); font-size: 14px; }
-    .choice {
-      display: grid;
-      grid-template-columns: 42px 1fr;
-      gap: 12px;
-      align-items: center;
-      width: 100%;
-      margin: 10px 0;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 17px;
-      background: white;
-      text-align: left;
-    }
-    .choice.featured { border: 2px solid var(--green); background: var(--green-soft); }
-    .choice .icon {
-      display: grid;
-      place-items: center;
-      width: 42px;
-      height: 42px;
-      border-radius: 13px;
-      background: #eef1ec;
-      font-size: 21px;
-    }
-    .choice strong { display: block; font-size: 14px; }
-    .choice span { color: var(--muted); font-size: 11px; }
-    .disclaimer { margin-top: 18px; color: var(--muted); font-size: 10px; text-align: center; }
-    .measure-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .measure {
-      padding: 18px;
-      border-radius: 18px;
-      background: var(--blue-soft);
-      border: 1px solid #c8dced;
-    }
-    .measure strong { display: block; color: var(--blue); margin-bottom: 6px; }
+    .flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 10px; align-items: center; margin-bottom: 18px; }
+    .flow-node { padding: 17px; border-radius: 17px; background: #f1f4f7; }
+    .arrow { color: var(--orange); font-size: 25px; font-weight: 900; }
+    .woz-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .participant, .operator { padding: 24px; border-radius: 22px; }
+    .participant { background: var(--orange-soft); }
+    .operator { color: white; background: var(--ink); }
+    .script-row { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: start; padding: 10px 0; border-bottom: 1px solid rgba(100,112,132,.25); }
+    .script-row:last-child { border-bottom: 0; }
+    .script-no { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--orange); font-weight: 900; }
+    .operator .script-row { border-color: #41516a; }
+    .operator .script-no { background: var(--green); }
+    .operator p, .operator span { color: #d4dce7; }
+    .error { color: #9f3515; font-weight: 900; }
+    .fixed { color: var(--green); font-weight: 900; }
 
-    .woz-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
-    .flow {
-      display: grid;
-      grid-template-columns: 1fr 44px 1fr 44px 1fr;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 18px;
-    }
-    .flow-node { min-height: 100px; padding: 14px; border-radius: 16px; border: 1px solid var(--line); background: #fbfcfa; font-size: 13px; }
-    .arrow { text-align: center; color: var(--green); font-size: 26px; font-weight: 900; }
-    .operator, .participant {
-      padding: 20px;
-      border-radius: 20px;
-      border: 1px solid var(--line);
-      background: #fff;
-    }
-    .operator { background: var(--orange-soft); border-color: #f5c9aa; }
-    .operator h3, .participant h3 { margin-top: 0; }
-    .script-row { display: grid; grid-template-columns: 42px 1fr; gap: 10px; margin: 12px 0; font-size: 13px; }
-    .script-no { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--ink); color: white; font-weight: 850; }
-    .slot-sheet {
-      display: grid;
-      gap: 9px;
-      margin-top: 14px;
-      padding: 14px;
-      border-radius: 14px;
-      background: white;
-      font-size: 12px;
-    }
-    .slot { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 7px; border-bottom: 1px dashed var(--line); }
-    .slot:last-child { border: 0; padding-bottom: 0; }
-    .slot em { color: var(--green); font-style: normal; font-weight: 800; }
-
-    .tradeoff { margin-top: 22px; padding: 32px; border-radius: 28px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
-    th, td { padding: 13px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
-    th { background: #f4f6f2; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
-    .decision {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 18px;
-    }
-    .decision div { padding: 16px; border-radius: 16px; background: #f5f7f3; font-size: 12px; }
-    .decision strong { display: block; color: var(--green); margin-bottom: 6px; font-size: 13px; }
-
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      margin-top: 22px;
-      padding: 26px 32px;
-      border-radius: 26px;
-      background: var(--ink);
-      color: white;
-    }
-    .footer p { margin: 5px 0 0; color: #cbd3df; }
+    .tradeoff { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; min-width: 780px; }
+    th, td { padding: 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: white; background: var(--ink); }
+    th:first-child { border-radius: 12px 0 0 0; }
+    th:last-child { border-radius: 0 12px 0 0; }
+    td:first-child { font-weight: 900; }
+    .decision { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
+    .decision div { padding: 16px; border-radius: 17px; background: #f1f4f7; color: var(--muted); font-size: 13px; }
+    .decision strong { display: block; margin-bottom: 5px; color: var(--ink); }
+    .footer { display: flex; justify-content: space-between; gap: 20px; margin-top: 18px; padding: 24px 30px; border-radius: 24px; color: white; background: var(--ink); }
+    .footer p { margin: 4px 0 0; color: #cbd3df; }
 
     @media (max-width: 1100px) {
-      .storyboard { grid-template-columns: repeat(3, 1fr); }
       .stack { grid-template-columns: repeat(2, 1fr); }
+      .frames { grid-template-columns: repeat(2, 1fr); }
       .prompts { grid-template-columns: repeat(2, 1fr); }
+      .ab-layout { grid-template-columns: 1fr 1fr; }
+      .scorecard { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+      .score-item { border: 0; }
     }
     @media (max-width: 820px) {
-      .hero, .approach-grid, .fake-layout, .woz-layout { grid-template-columns: 1fr; }
       .topbar { position: static; align-items: flex-start; flex-direction: column; }
-      .storyboard { grid-template-columns: repeat(2, 1fr); }
-      .fake-layout { justify-items: center; }
-      .measure-grid, .decision { grid-template-columns: 1fr 1fr; }
+      .hero, .approach-grid, .story-compare, .ab-layout, .woz-layout { grid-template-columns: 1fr; }
+      .hero-main { min-height: auto; padding: 36px; }
+      .hero-side { padding: 34px; }
+      .section-head { align-items: start; flex-direction: column; }
+      .scorecard { grid-column: auto; grid-template-columns: 1fr 1fr; }
+      .flow { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); text-align: center; }
+      .decision { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 560px) {
-      .board { width: min(100% - 18px, 1440px); padding-top: 10px; }
+      .board { width: min(100% - 18px, 1440px); padding-top: 9px; }
       .hero-main, .hero-side, .section, .test-card, .tradeoff { padding: 22px; border-radius: 22px; }
       h1 { font-size: 44px; }
-      .section h2, .test-card h2, .tradeoff h2 { font-size: 28px; }
-      .storyboard, .stack, .prompts, .measure-grid, .decision { grid-template-columns: 1fr; }
-      .mobile { width: min(100%, 360px); }
-      .flow { grid-template-columns: 1fr; }
-      .arrow { transform: rotate(90deg); }
+      .frames, .stack, .prompts, .scorecard, .decision { grid-template-columns: 1fr; }
+      .phone { width: 100%; }
       .footer { flex-direction: column; }
+      .footer div:last-child { text-align: left !important; }
     }
     @media print {
       body { background: white; }
       .topbar { display: none; }
       .board { width: 100%; padding: 0; }
-      .hero-main, .hero-side, .section, .test-card, .tradeoff { box-shadow: none; break-inside: avoid; }
+      .hero, .section, .test-card, .tradeoff { box-shadow: none; break-inside: avoid; }
     }
   </style>
 </head>
@@ -422,23 +220,23 @@
     <section class="hero" id="hypothesis">
       <div class="hero-main">
         <div>
-          <p class="eyebrow">Day 17 · AI Prototyping & MVP</p>
-          <h1>Test nhu cầu trước khi build cả hệ thống.</h1>
-          <p class="hero-copy">Ba cách rẻ hơn để kiểm tra cùng một hypothesis của Trợ Lý Đặt Xe An Toàn — từ điều user kể, điều user chọn đến điều user thực sự làm.</p>
+          <p class="eyebrow">Day 17 · AI Prototyping &amp; MVP</p>
+          <h1>Test trải nghiệm trước khi build AI stack.</h1>
+          <p class="hero-copy">Ba cách rẻ hơn để kiểm tra cùng một hypothesis: conversational flow có read-back và correction có giúp user ít cần trợ giúp hơn, đồng thời kiểm soát tốt hơn form app?</p>
         </div>
         <div class="chips">
-          <span class="chip"><span class="dot"></span> Bùi Ngọc Khánh</span>
-          <span class="chip"><span class="dot"></span> 2A202600743</span>
+          <span class="chip"><span class="dot"></span> Trần Đức Đăng Khôi</span>
+          <span class="chip"><span class="dot"></span> 2A202600889</span>
           <span class="chip"><span class="dot"></span> AI Product Strategy</span>
         </div>
       </div>
       <aside class="hero-side">
         <div>
-          <p class="eyebrow" style="color:#8ed0bc">Hypothesis quan trọng nhất</p>
-          <h2>Người dùng có thật sự muốn tự làm job này?</h2>
-          <blockquote>“Khi cần đi bệnh viện, người lớn tuổi hoặc ít rành app có nhu cầu trực tiếp tham gia sắp xếp và tự xác nhận chuyến đi, thay vì luôn giao toàn bộ thao tác và trách nhiệm cho người thân.”</blockquote>
+          <p class="eyebrow" style="color:#8ed0bc">Hypothesis quan trọng</p>
+          <h2>Hội thoại có thật sự tốt hơn form cho Locate &amp; Modify?</h2>
+          <blockquote>“Nếu user có thể nói, nghe lại, sửa từng phần và xác nhận rõ, họ sẽ hoàn thành scenario với ít trợ giúp hơn và cảm thấy kiểm soát, an toàn hơn.”</blockquote>
         </div>
-        <div class="risk"><strong>Nếu sai:</strong> primary persona, value proposition “tự chủ” và lý do đầu tư vào voice-first flow đều yếu đi.</div>
+        <div class="risk"><strong>Nếu sai:</strong> team cần ưu tiên accessible form, caregiver mode hoặc assisted-booking thay vì đầu tư sâu vào voice-first flow.</div>
       </aside>
     </section>
 
@@ -446,9 +244,9 @@
       <div class="section-head">
         <div>
           <p class="eyebrow">Current approach snapshot</p>
-          <h2>MVP 4 tuần đang test quá nhiều thứ cùng lúc</h2>
+          <h2>MVP bốn tuần đang test quá nhiều thứ cùng lúc</h2>
         </div>
-        <p>Current approach phù hợp để chứng minh hệ thống, nhưng quá lớn để trả lời câu hỏi desirability đầu tiên.</p>
+        <p>Current approach có thể chứng minh team build được hệ thống, nhưng quá lớn để trả lời riêng câu hỏi usability và trust đầu tiên.</p>
       </div>
       <div class="approach-grid">
         <div class="stack" aria-label="Các thành phần current approach">
@@ -457,18 +255,18 @@
           <div class="stack-item">LLM extraction<span>Intent, slot, correction</span></div>
           <div class="stack-item">Geocoding<span>Candidate thật tại Hà Nội</span></div>
           <div class="stack-item">State machine<span>Safety invariants và consent</span></div>
-          <div class="stack-item">Mock booking<span>Driver, vehicle, 5 trạng thái</span></div>
+          <div class="stack-item">Mock booking<span>Driver, vehicle, trip states</span></div>
           <div class="stack-item">Admin<span>User và booking management</span></div>
-          <div class="stack-item">Evaluation<span>20 scenario + metrics</span></div>
+          <div class="stack-item">Evaluation<span>Scenario + metrics</span></div>
         </div>
         <div class="cost-box">
           <strong>Câu hỏi cần ép mình hỏi lại</strong>
-          <p style="font-size:22px;font-weight:800;margin:0 0 16px">Còn cách nào rẻ hơn để test hypothesis này không?</p>
+          <p>Còn cách nào rẻ hơn để test hypothesis này không?</p>
           <ul>
             <li>Chưa có user research thực tế.</li>
             <li>Nhiều API và dependency kỹ thuật.</li>
-            <li>Có nguy cơ test feasibility trước value.</li>
-            <li>Nếu assumption về tự chủ sai, build tốt vẫn khó adoption.</li>
+            <li>Có nguy cơ test feasibility trước experience.</li>
+            <li>Nếu flow không giảm trợ giúp, build tốt vẫn khó tạo giá trị.</li>
           </ul>
         </div>
       </div>
@@ -477,179 +275,151 @@
     <div class="tests">
       <section class="test-card" id="test-a">
         <p class="eyebrow">Cheaper test A</p>
-        <h2>Storyboard “Tự đi bệnh viện”</h2>
+        <h2>Before/After Storyboard · “Sửa điểm đến mà không làm lại từ đầu”</h2>
         <div class="test-meta">
-          <span class="tag green">Desirability</span>
+          <span class="tag green">Comprehension</span>
           <span class="tag green">1 ngày</span>
           <span class="tag green">Không code</span>
-          <span class="tag orange">Signal: điều user kể</span>
+          <span class="tag orange">Signal: hiểu + cảm nhận</span>
         </div>
-        <div class="storyboard" aria-label="Storyboard sáu khung">
-          <article class="frame">
-            <span class="frame-no">KHUNG 01</span>
-            <div class="scene"><div class="person"></div><div class="bubble">“Mai tôi phải tái khám.”</div></div>
-            <h3>Phát sinh nhu cầu</h3>
-            <p>Bác cần tự đi bệnh viện vào buổi sáng.</p>
+        <div class="story-compare">
+          <article class="journey">
+            <div class="journey-title"><h3>Before · Form app</h3><span>Nhiều bước</span></div>
+            <div class="frames">
+              <div class="frame"><span class="frame-no">01</span><div class="scene"></div><h3>Nhập thông tin</h3><p>Điền điểm đón, điểm đến và loại xe.</p></div>
+              <div class="frame"><span class="frame-no">02</span><div class="scene"></div><h3>Phát hiện sai</h3><p>Điểm đến đang là “cổng chính”.</p></div>
+              <div class="frame"><span class="frame-no">03</span><div class="scene"></div><h3>Quay lại sửa</h3><p>Tìm đúng field, nhập lại và kiểm tra toàn bộ.</p></div>
+            </div>
           </article>
-          <article class="frame">
-            <span class="frame-no">KHUNG 02</span>
-            <div class="scene orange"><div class="person"></div><div class="phone"></div></div>
-            <h3>Gặp khó với app</h3>
-            <p>Địa chỉ dài, chữ nhỏ và nhiều lựa chọn.</p>
-          </article>
-          <article class="frame">
-            <span class="frame-no">KHUNG 03</span>
-            <div class="scene orange"><div class="person"></div><div class="bubble">“Hay gọi con đặt hộ?”</div></div>
-            <h3>Alternative hiện tại</h3>
-            <p>Bác cân nhắc giao thao tác và trách nhiệm cho người thân.</p>
-          </article>
-          <article class="frame">
-            <span class="frame-no">KHUNG 04</span>
-            <div class="scene blue"><div class="person"></div><div class="phone"></div><div class="bubble">“Nói nơi muốn đi”</div></div>
-            <h3>Thử trợ lý</h3>
-            <p>Bác nói nhu cầu bằng tiếng Việt tự nhiên.</p>
-          </article>
-          <article class="frame">
-            <span class="frame-no">KHUNG 05</span>
-            <div class="scene blue"><div class="person"></div><div class="bubble">“Không phải cổng chính…”</div></div>
-            <h3>Sửa và nghe lại</h3>
-            <p>Hệ thống chỉ sửa phần sai và đọc lại toàn bộ.</p>
-          </article>
-          <article class="frame">
-            <span class="frame-no">KHUNG 06</span>
-            <div class="scene"><div class="person"></div><div class="bubble">“Tôi xác nhận đặt xe.”</div></div>
-            <h3>Tự quyết định</h3>
-            <p>Bác giữ quyền xác nhận thay vì giao điện thoại cho người khác.</p>
+          <article class="journey after">
+            <div class="journey-title"><h3>After · Conversation</h3><span>Sửa đúng slot</span></div>
+            <div class="frames">
+              <div class="frame"><span class="frame-no">01</span><div class="scene"></div><h3>Nghe summary</h3><p>Trợ lý đọc lại toàn bộ thông tin chuyến.</p></div>
+              <div class="frame"><span class="frame-no">02</span><div class="scene"></div><h3>Nói phần cần sửa</h3><p>“Không phải cổng chính, đổi sang cổng số 2.”</p></div>
+              <div class="frame"><span class="frame-no">03</span><div class="scene"></div><h3>Nghe lại &amp; xác nhận</h3><p>Giữ nguyên phần đúng, đọc lại trước khi tạo booking mock.</p></div>
+            </div>
           </article>
         </div>
         <div class="prompts">
-          <div class="prompt">Trong chuyến đi gần nhất, ai là người thực hiện thao tác đặt xe?</div>
-          <div class="prompt">Khung nào giống hoặc không giống trải nghiệm thật của bác?</div>
-          <div class="prompt">Tại thời điểm nào bác muốn nhờ người khác làm thay?</div>
-          <div class="prompt">Điều gì phải đúng để bác tự chịu trách nhiệm xác nhận?</div>
+          <div class="prompt">Ở flow nào bác nghĩ mình sẽ cần người khác trợ giúp?</div>
+          <div class="prompt">Sau mỗi flow, chuyến đi cuối cùng có thông tin gì?</div>
+          <div class="prompt">Bước nào làm bác cảm thấy mất hoặc giữ quyền kiểm soát?</div>
+          <div class="prompt">Nếu hệ thống nghe sai, bác muốn nó phản hồi thế nào?</div>
         </div>
       </section>
 
       <section class="test-card" id="test-b">
         <p class="eyebrow">Cheaper test B</p>
-        <h2>Fake-door “Bạn muốn đặt chuyến theo cách nào?”</h2>
+        <h2>Paper A/B Task Walkthrough · “Cùng một chuyến, hai cách hoàn thành”</h2>
         <div class="test-meta">
-          <span class="tag blue">Preference</span>
-          <span class="tag blue">Vài giờ</span>
-          <span class="tag blue">1 màn hình</span>
-          <span class="tag orange">Signal: điều user chọn</span>
+          <span class="tag blue">Comparative usability</span>
+          <span class="tag blue">1 ngày</span>
+          <span class="tag blue">Manual states</span>
+          <span class="tag orange">Signal: điều user làm</span>
         </div>
-        <div class="fake-layout">
-          <div class="mobile" aria-label="Màn hình fake-door lựa chọn cách đặt chuyến">
-            <div class="mobile-screen">
-              <div class="mobile-top"><span>9:41</span><span>● ● ●</span></div>
-              <h3>Sáng mai bác cần đi Bệnh viện Bạch Mai</h3>
-              <p class="sub">Bác muốn chuẩn bị chuyến đi theo cách nào?</p>
-              <button class="choice" type="button">
-                <span class="icon">⌨</span>
-                <span><strong>Tôi tự dùng ứng dụng</strong><span>Tôi trực tiếp nhập, kiểm tra và xác nhận chuyến</span></span>
-              </button>
-              <button class="choice" type="button">
-                <span class="icon">☎</span>
-                <span><strong>Tôi nhờ người thân làm giúp</strong><span>Người thân trực tiếp nhập, kiểm tra và xác nhận chuyến</span></span>
-              </button>
-              <button class="choice featured" type="button">
-                <span class="icon">◉</span>
-                <span><strong>Tôi tự dùng trợ lý hội thoại</strong><span>Tôi trực tiếp nói, nghe lại, sửa và xác nhận chuyến</span></span>
-              </button>
-              <p class="disclaimer">Prototype nghiên cứu — chưa gọi xe thật và không thanh toán.</p>
-            </div>
-          </div>
-          <div>
-            <div class="section-head" style="margin-bottom:16px">
-              <div>
-                <p class="eyebrow">Phía sau test</p>
-                <h2 style="font-size:28px">Ghi lựa chọn đầu tiên, rồi hỏi “vì sao?”</h2>
+        <div class="ab-layout">
+          <article class="prototype">
+            <h3>Flow A · Form</h3>
+            <p>Cùng scenario, dữ liệu và lỗi cổng bệnh viện.</p>
+            <div class="phone" aria-label="Prototype form ứng dụng">
+              <div class="phone-top"><span>9:41</span><span>FORM</span></div>
+              <div class="screen">
+                <h3>Thông tin chuyến đi</h3>
+                <div class="field"><small>Điểm đón</small><strong>Ngõ 12 Nguyễn Trãi</strong></div>
+                <div class="field"><small>Điểm đến</small><strong>Bệnh viện Bạch Mai · Cổng chính</strong></div>
+                <div class="field"><small>Loại xe</small><strong>Xe 4 chỗ</strong></div>
+                <div class="button">Kiểm tra và đặt chuyến</div>
               </div>
             </div>
-            <div class="measure-grid">
-              <div class="measure"><strong>Primary signal</strong>Tỷ lệ chọn tự thực hiện (app + trợ lý) so với giao job cho người thân.</div>
-              <div class="measure"><strong>Secondary signal</strong>Trong nhóm tự thực hiện, preference giữa app và trợ lý hội thoại.</div>
-              <div class="measure"><strong>Rejection signal</strong>Điều khiến user không chọn: sợ AI sai, không muốn chịu trách nhiệm, quen nhờ người thân.</div>
-              <div class="measure"><strong>Boundary</strong>Thay đổi điều kiện nào thì user đổi lựa chọn?</div>
+          </article>
+          <article class="prototype conversation">
+            <h3>Flow B · Conversation</h3>
+            <p>Summary, correction từng slot và explicit confirmation.</p>
+            <div class="phone" aria-label="Prototype conversational flow">
+              <div class="phone-top"><span>9:41</span><span>VOICE</span></div>
+              <div class="screen">
+                <h3>Tôi đang nghe</h3>
+                <div class="mic">●</div>
+                <div class="summary-row"><small>Trợ lý đọc lại</small><strong>Đến Bệnh viện Bạch Mai, cổng chính…</strong></div>
+                <div class="summary-row"><small>Bác có thể nói</small><strong>“Đổi điểm đến sang cổng số 2.”</strong></div>
+                <div class="button">Nghe lại toàn bộ</div>
+              </div>
             </div>
-            <div class="cost-box" style="margin-top:14px">
-              <strong>Giới hạn phải nói thẳng</strong>
-              Click không phải adoption. Copy phải cân bằng và thứ tự ba option phải được xoay giữa participant để giảm framing bias.
-            </div>
-          </div>
+          </article>
+          <aside class="scorecard">
+            <h3>Scorecard chung</h3>
+            <div class="score-item"><strong>Completion</strong><span>Hoàn thành đúng scenario?</span></div>
+            <div class="score-item"><strong>Help requests</strong><span>Bao nhiêu lần cần facilitator?</span></div>
+            <div class="score-item"><strong>Error detection</strong><span>Có nhận ra “cổng chính” sai?</span></div>
+            <div class="score-item"><strong>Correction success</strong><span>Sửa đúng slot, giữ phần còn lại?</span></div>
+            <div class="score-item"><strong>Control / trust</strong><span>Rating 1–5 sau mỗi flow.</span></div>
+            <div class="score-item"><strong>Counterbalance</strong><span>Đảo thứ tự A/B giữa participant.</span></div>
+          </aside>
         </div>
       </section>
 
       <section class="test-card" id="test-c">
         <p class="eyebrow">Cheaper test C</p>
-        <h2>Wizard-of-Oz “Safety Concierge”</h2>
+        <h2>Wizard-of-Oz Error Recovery · “Nghe sai cổng bệnh viện”</h2>
         <div class="test-meta">
-          <span class="tag orange">Behavior</span>
+          <span class="tag orange">Behavior + trust</span>
           <span class="tag orange">1–2 ngày</span>
           <span class="tag orange">Human-in-the-loop</span>
-          <span class="tag green">Signal: điều user làm</span>
+          <span class="tag green">Signal: recovery thật</span>
         </div>
         <div class="flow" aria-label="Luồng Wizard of Oz">
-          <div class="flow-node"><strong>1 · User</strong><br>Nói nhu cầu đi bệnh viện bằng cách tự nhiên.</div>
+          <div class="flow-node"><strong>1 · User</strong><br>Nói điểm đón, điểm đến và nhu cầu đi bệnh viện.</div>
           <div class="arrow">→</div>
-          <div class="flow-node"><strong>2 · Operator</strong><br>Nghe, điền slot và chọn phản hồi có sẵn.</div>
+          <div class="flow-node"><strong>2 · Operator</strong><br>Điền slot và cài lỗi “cổng chính” theo script.</div>
           <div class="arrow">→</div>
-          <div class="flow-node"><strong>3 · Prototype</strong><br>Hiện/đọc câu hỏi, summary và booking mock.</div>
+          <div class="flow-node"><strong>3 · Prototype</strong><br>Đọc lại, nhận correction và yêu cầu xác nhận.</div>
         </div>
         <div class="woz-layout">
-          <div class="participant">
-            <h3>User nhìn thấy gì?</h3>
-            <div class="script-row"><span class="script-no">1</span><div><strong>Đang nghe</strong><br>User bấm mic và nói nhu cầu.</div></div>
-            <div class="script-row"><span class="script-no">2</span><div><strong>Hỏi lại</strong><br>“Bác muốn được đón ở đâu?”</div></div>
-            <div class="script-row"><span class="script-no">3</span><div><strong>Read-back</strong><br>Đọc điểm đón, điểm đến và loại xe.</div></div>
-            <div class="script-row"><span class="script-no">4</span><div><strong>Correction</strong><br>User sửa một phần; hệ thống giữ phần còn lại.</div></div>
-            <div class="script-row"><span class="script-no">5</span><div><strong>Explicit confirmation</strong><br>Chỉ tạo booking mock sau câu xác nhận rõ.</div></div>
-          </div>
-          <div class="operator">
-            <h3>Operator làm gì phía sau?</h3>
-            <p style="margin-top:0;font-size:13px">Người vận hành không “trả lời thông minh tùy hứng”; chỉ được dùng response library và safety rules đã chuẩn bị.</p>
-            <div class="slot-sheet">
-              <div class="slot"><span>Điểm đón</span><em>Ngõ 12 Nguyễn Trãi</em></div>
-              <div class="slot"><span>Điểm đến</span><em>Bệnh viện Bạch Mai</em></div>
-              <div class="slot"><span>Loại xe</span><em>Xe 4 chỗ</em></div>
-              <div class="slot"><span>Correction</span><em>Cổng số 2</em></div>
-              <div class="slot"><span>Consent</span><em>Chưa xác nhận</em></div>
-            </div>
-            <div class="risk" style="margin-top:14px;color:var(--ink);border-color:#f5c9aa;background:white">
-              <strong>Metrics:</strong> tự hoàn thành; số lần giao thiết bị/nhờ thao tác thay; correction chủ động; phát hiện lỗi read-back; explicit confirmation; control rating 1–5.
-            </div>
-          </div>
+          <article class="participant">
+            <h3>User nhìn thấy/nghe thấy gì?</h3>
+            <div class="script-row"><span class="script-no">1</span><div><strong>Đang nghe</strong><br>User nói nhu cầu tự nhiên.</div></div>
+            <div class="script-row"><span class="script-no">2</span><div><strong>Hỏi thiếu slot</strong><br>“Bác muốn được đón ở đâu?”</div></div>
+            <div class="script-row"><span class="script-no">3</span><div><strong>Read-back có lỗi</strong><br>Điểm đến: <span class="error">Bệnh viện Bạch Mai · Cổng chính</span>.</div></div>
+            <div class="script-row"><span class="script-no">4</span><div><strong>Correction</strong><br>User yêu cầu đổi sang <span class="fixed">cổng số 2</span>.</div></div>
+            <div class="script-row"><span class="script-no">5</span><div><strong>Explicit confirmation</strong><br>Đọc lại toàn bộ trước booking mock.</div></div>
+          </article>
+          <article class="operator">
+            <h3>Operator script</h3>
+            <p>Operator không trả lời tùy hứng; chỉ dùng response library và safety rules đã chuẩn bị.</p>
+            <div class="script-row"><span class="script-no">1</span><div><strong>Capture</strong><br><span>Ghi input vào slot sheet.</span></div></div>
+            <div class="script-row"><span class="script-no">2</span><div><strong>Inject</strong><br><span>Đổi destination detail thành “cổng chính”.</span></div></div>
+            <div class="script-row"><span class="script-no">3</span><div><strong>Observe</strong><br><span>Không gợi ý lỗi; chờ user phát hiện.</span></div></div>
+            <div class="script-row"><span class="script-no">4</span><div><strong>Update one slot</strong><br><span>Giữ điểm đón/loại xe, chỉ sửa destination detail.</span></div></div>
+            <div class="script-row"><span class="script-no">5</span><div><strong>Log</strong><br><span>Completion, help, correction, confirmation, control/trust.</span></div></div>
+          </article>
         </div>
       </section>
     </div>
 
     <section class="tradeoff" id="tradeoff">
       <p class="eyebrow">Quick comparison</p>
-      <h2>Ba test, ba mức gần hành vi thật</h2>
+      <h2>Ba test, ba mức độ gần hành vi thật</h2>
       <table>
-        <thead>
-          <tr><th>Tiêu chí</th><th>A · Storyboard</th><th>B · Fake door</th><th>C · Wizard of Oz</th></tr>
-        </thead>
+        <thead><tr><th>Tiêu chí</th><th>A · Storyboard</th><th>B · Paper A/B</th><th>C · Wizard of Oz</th></tr></thead>
         <tbody>
-          <tr><td>Signal chính</td><td>Điều user kể</td><td>Điều user chọn</td><td>Điều user làm</td></tr>
-          <tr><td>Tốc độ</td><td>1 ngày</td><td>Vài giờ</td><td>1–2 ngày</td></tr>
+          <tr><td>Signal chính</td><td>User hiểu và cảm nhận</td><td>User thực hiện hai flow</td><td>User phát hiện và recovery</td></tr>
+          <tr><td>Tốc độ</td><td>1 ngày</td><td>1 ngày</td><td>1–2 ngày</td></tr>
           <tr><td>Độ gần hành vi thật</td><td>Thấp–trung bình</td><td>Trung bình</td><td>Cao nhất</td></tr>
-          <tr><td>Học rõ nhất</td><td>Context, động lực, alternative</td><td>Preference, value message</td><td>Trust, correction, điểm bỏ cuộc</td></tr>
-          <tr><td>Giới hạn</td><td>Social-desirability bias</td><td>Click ≠ adoption</td><td>Operator bias, không test feasibility</td></tr>
+          <tr><td>Học rõ nhất</td><td>Comprehension, perceived control</td><td>Completion, help, error detection</td><td>Correction, trust, confirmation</td></tr>
+          <tr><td>Giới hạn</td><td>Self-report, framing</td><td>Không có voice thật</td><td>Operator bias, không test feasibility</td></tr>
         </tbody>
       </table>
       <div class="decision">
-        <div><strong>Nếu nhu cầu tự chủ yếu</strong>Xem lại job executor trước khi build.</div>
-        <div><strong>Nếu muốn tự chủ nhưng không chọn voice</strong>Khám phá accessible form hoặc caregiver mode.</div>
-        <div><strong>Nếu chọn concept nhưng bỏ cuộc</strong>Sửa workflow trước khi tích hợp AI.</div>
-        <div><strong>Nếu WoZ thành công</strong>Tiến tới technical spike cho AI stack.</div>
+        <div><strong>Completion/correction thấp</strong>Sửa workflow hoặc ưu tiên accessible form.</div>
+        <div><strong>Task tốt nhưng trust thấp</strong>Sửa read-back và trạng thái xác nhận.</div>
+        <div><strong>WoZ fail ở correction</strong>Thu hẹp intent/slot và chuẩn hóa recovery.</div>
+        <div><strong>Đạt toàn bộ ngưỡng</strong>Tiến tới technical spike cho AI stack.</div>
       </div>
     </section>
 
     <footer class="footer">
-      <div><strong>Thay đổi sau review</strong><p>Đã tách nhu cầu tự chủ khỏi preference đối với voice, cân bằng Test B và thêm behavioral metrics cho Test C.</p></div>
-      <div style="text-align:right"><strong>Day 17 · Track 1</strong><p>Bùi Ngọc Khánh · 2A202600743</p></div>
+      <div><strong>Day 17 · Track 1</strong><p>Trợ Lý Đặt Xe An Toàn · V-VoiceRide</p></div>
+      <div style="text-align:right"><strong>Trần Đức Đăng Khôi</strong><p>2A202600889 · AI Product Strategy</p></div>
     </footer>
   </main>
 </body>
